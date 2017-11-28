@@ -1,0 +1,12 @@
+{
+  "name": "kiksaus/kikcms-core",
+  "require": {
+    "swiftmailer/swiftmailer": "5.4.*",
+    "monolog/monolog": "^1.22"
+  },
+  "autoload": {
+    "psr-4": {
+      "KikCmsCore\\": "src"
+    }
+  }
+}
