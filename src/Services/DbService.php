@@ -188,7 +188,7 @@ class DbService extends Injectable
             }
 
             $this->db->query(
-                "INSERT" . "INTO " . $this->getTableForModel($model) . " (" . implode(',', $keys) . ")" .
+                "INSERT" . " INTO " . $this->getTableForModel($model) . " (" . implode(',', $keys) . ")" .
                 "VALUES " . implode(',', $insertValues)
             );
         }
