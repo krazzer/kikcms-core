@@ -332,12 +332,10 @@ class DbService extends Injectable
      *
      * $result = [
      *      21 => [
-     *          'group_id' => 21,
      *          'name'     => 'Justin',
      *          'email'    => 'justin@justin.com',
      *      ],
      *      26 => [
-     *          'group_id' => 26,
      *          'name'     => 'Pete',
      *          'email'    => 'pete@pete.com',
      *      ]
@@ -352,10 +350,12 @@ class DbService extends Injectable
         $keyedRows = [];
 
         foreach ($rows as $row) {
-            $row      = (array) $row;
-            $firstKey = array_values((array) $row)[0];
+            $row        = (array) $row;
+            $firstValue = first($row);
 
-            $keyedRows[$firstKey] = $row;
+            unset($row[first_key($row)]);
+
+            $keyedRows[$firstValue] = $row;
         }
 
         return $keyedRows;
@@ -368,7 +368,7 @@ class DbService extends Injectable
      */
     public function getObject(Builder $query): ?Model
     {
-        if( ! $object = $query->getQuery()->execute()->getFirst()){
+        if ( ! $object = $query->getQuery()->execute()->getFirst()) {
             return null;
         }
 
@@ -396,7 +396,7 @@ class DbService extends Injectable
 
         $results = $query->getQuery()->execute();
 
-        foreach ($results as $result){
+        foreach ($results as $result) {
             $objectList->add($result);
         }
 
@@ -416,7 +416,7 @@ class DbService extends Injectable
 
         $results = $query->getQuery()->execute();
 
-        foreach ($results as $result){
+        foreach ($results as $result) {
             $objectMap->add($result, $result->$mapBy);
         }
 
@@ -542,7 +542,7 @@ class DbService extends Injectable
      */
     public function toStorageArray(array $valueMap): array
     {
-        foreach ($valueMap as $key => $value){
+        foreach ($valueMap as $key => $value) {
             $valueMap[$key] = $this->toStorage($value);
         }
 
