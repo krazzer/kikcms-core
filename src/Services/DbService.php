@@ -362,6 +362,41 @@ class DbService extends Injectable
     }
 
     /**
+     * Build up an array with the first value as key from the results of the query, and the second as list of values like:
+     *
+     * $result = [
+     *      21 => [
+     *          'Justin', 'Pete'
+     *      ],
+     *      26 => [
+     *          'Jessie', 'Hank', 'Walter'
+     *      ]
+     * ]
+     *
+     * @param Builder $query
+     * @return array
+     */
+    public function getKeyedValues(Builder $query): array
+    {
+        $rows        = $this->getRows($query);
+        $keyedValues = [];
+
+        foreach ($rows as $row) {
+            $row         = (array) $row;
+            $firstValue  = first($row);
+            $secondValue = array_values($row)[1];
+
+            if ( ! array_key_exists($firstValue, $keyedValues)) {
+                $keyedValues[$firstValue] = [];
+            }
+
+            $keyedValues[$firstValue][] = $secondValue;
+        }
+
+        return $keyedValues;
+    }
+
+    /**
      * @param $query
      *
      * @return null|Model|mixed
