@@ -9,6 +9,7 @@ class DbConfig
 
     const SQL_DATE_FORMAT     = 'Y-m-d';
     const SQL_DATETIME_FORMAT = 'Y-m-d H:i:s';
+    const SQL_TIME_FORMAT     = 'H:i:s';
 
     const SQL_SORT_ASCENDING  = 'asc';
     const SQL_SORT_DESCENDING = 'desc';
