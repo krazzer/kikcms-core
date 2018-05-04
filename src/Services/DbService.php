@@ -606,7 +606,7 @@ class DbService extends Injectable
         foreach ($where as $column => $condition) {
             if (is_array($condition)) {
                 if ( ! empty($condition)) {
-                    $whereClauses[] = $column . " IN (" . implode(',', $condition) . ")";
+                    $whereClauses[] = $column . " IN (\"" . implode('","', $condition) . "\")";
                 }
             } elseif (is_numeric($condition)) {
                 $whereClauses[] = $column . ' = ' . $condition;
