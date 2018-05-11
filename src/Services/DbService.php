@@ -117,6 +117,22 @@ class DbService extends Injectable
     }
 
     /**
+     * @param string $query
+     * @return array
+     */
+    public function queryValues(string $query): array
+    {
+        $values = [];
+        $result = $this->db->query($query);
+
+        while ($row = $result->fetch()) {
+            $values[] = $row[0];
+        }
+
+        return $values;
+    }
+
+    /**
      * @param string $model
      * @return bool
      */
