@@ -378,6 +378,45 @@ class DbService extends Injectable
     }
 
     /**
+     * Build up an array like:
+     *
+     * $result = [
+     *      firstColumn => [
+     *          secondColumn => thirdColumn,
+     *          secondColumn => thirdColumn,
+     *      ],
+     *      firstColumn => [
+     *          secondColumn => thirdColumn,
+     *          secondColumn => thirdColumn,
+     *      ]
+     * ]
+     *
+     * @param Builder $query
+     * @return array
+     */
+    public function getKeyedAssoc(Builder $query): array
+    {
+        $rows      = $this->getRows($query);
+        $keyedRows = [];
+
+        foreach ($rows as $row) {
+            $row = array_values($row);
+
+            $firstColumn  = $row[0];
+            $secondColumn = $row[1];
+            $thirdColumn  = $row[2];
+
+            if ( ! array_key_exists($firstColumn, $keyedRows)){
+                $keyedRows[$firstColumn] = [];
+            }
+
+            $keyedRows[$firstColumn][$secondColumn] = $thirdColumn;
+        }
+
+        return $keyedRows;
+    }
+
+    /**
      * Build up an array with the first value as key from the results of the query, and the second as list of values like:
      *
      * $result = [
@@ -509,16 +548,16 @@ class DbService extends Injectable
      * Build up a table from the results of the query, like:
      *
      * $result = [
-     *      1 => [
-     *          15 => [
+     *      firstColumn => [
+     *          secondColumn => [
      *              'group_id' => 1,
      *              'age'      => 15,
      *              'name'     => 'Justin',
      *              'email'    => 'justin@justin.com',
      *          ],
      *      ],
-     *      2 => [
-     *          16 => [
+     *      firstColumn => [
+     *          secondColumn => [
      *              'group_id' => 2,
      *              'age'      => 16,
      *              'name'     => 'Pete',
