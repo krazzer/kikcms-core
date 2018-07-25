@@ -55,6 +55,25 @@ function array_add_before_key(array $subject, string $keyToAddAfter, string $key
 }
 
 /**
+ * @param $array
+ * @param $oldKey
+ * @param $newKey
+ * @return array
+ */
+function array_change_key($array, $oldKey, $newKey): array
+{
+    if ( ! array_key_exists($oldKey, $array)) {
+        return $array;
+    }
+
+    $keys = array_keys($array);
+
+    $keys[array_search($oldKey, $keys)] = $newKey;
+
+    return array_combine($keys, $array);
+}
+
+/**
  * Return the first key of an array
  *
  * @param array $array
