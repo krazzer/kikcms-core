@@ -11,6 +11,34 @@ class Model extends \Phalcon\Mvc\Model
     const TABLE = null;
     const ALIAS = null;
 
+    /**
+     * @inheritdoc
+     */
+    public function __get($property)
+    {
+        if ( ! strstr($property, '.')) {
+            return parent::__get($property);
+        }
+
+        $parts = explode('.', $property);
+
+        $currentPart = clone $this;
+
+        foreach ($parts as $part) {
+            if ( ! $currentPart->$part) {
+                return null;
+            }
+
+            if (is_object($currentPart->$part)) {
+                $currentPart = clone $currentPart->$part;
+            } else {
+                $currentPart = $currentPart->$part;
+            }
+        }
+
+        return $currentPart;
+    }
+
     public function initialize()
     {
         if ( ! static::TABLE) {
@@ -61,7 +89,7 @@ class Model extends \Phalcon\Mvc\Model
      */
     public static function getById($id)
     {
-        if( ! $id){
+        if ( ! $id) {
             return null;
         }
 
@@ -77,7 +105,7 @@ class Model extends \Phalcon\Mvc\Model
     {
         $object = parent::findFirst($parameters);
 
-        if( ! $object){
+        if ( ! $object) {
             return null;
         }
 
@@ -91,7 +119,7 @@ class Model extends \Phalcon\Mvc\Model
      */
     public static function getByIdList(array $ids)
     {
-        if( ! $ids){
+        if ( ! $ids) {
             return [];
         }
 
@@ -170,10 +198,10 @@ class Model extends \Phalcon\Mvc\Model
     {
         $saved = parent::save($data, $whiteList);
 
-        if($messages = $this->getMessages()){
-           foreach ($messages as $message){
-               throw new Exception($message);
-           }
+        if ($messages = $this->getMessages()) {
+            foreach ($messages as $message) {
+                throw new Exception($message);
+            }
         }
 
         return $saved;
