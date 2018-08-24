@@ -18,4 +18,6 @@ class DbConfig
         self::SQL_SORT_ASCENDING,
         self::SQL_SORT_DESCENDING,
     ];
+
+    const STORAGE_SEPARATOR = ':';
 }
