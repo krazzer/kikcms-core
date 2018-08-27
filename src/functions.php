@@ -74,6 +74,22 @@ function array_change_key($array, $oldKey, $newKey): array
 }
 
 /**
+ * Fetch a value from an array by key, and return null if it doesn't exist
+ *
+ * @param $key
+ * @param array $array
+ * @return mixed|null
+ */
+function array_key($key, array $array)
+{
+    if( ! array_key_exists($key, $array)){
+        return null;
+    }
+
+    return $array[$key];
+}
+
+/**
  * Return the first key of an array
  *
  * @param array $array
