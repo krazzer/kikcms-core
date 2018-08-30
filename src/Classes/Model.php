@@ -3,7 +3,6 @@
 namespace KikCmsCore\Classes;
 
 use Exception;
-use KikCmsCore\Config\DbConfig;
 use ReflectionClass;
 use Phalcon\Mvc\Model\Resultset;
 
@@ -11,70 +10,6 @@ class Model extends \Phalcon\Mvc\Model
 {
     const TABLE = null;
     const ALIAS = null;
-
-    /**
-     * @inheritdoc
-     */
-    public function __get($property)
-    {
-        if ( ! strstr($property, DbConfig::STORAGE_SEPARATOR)) {
-            return parent::__get($property);
-        }
-
-        $parts = explode(DbConfig::STORAGE_SEPARATOR, $property);
-
-        switch (count($parts)){
-            case 2:
-                list($part1, $part2) = $parts;
-                return $this->$part1->$part2;
-            break;
-            case 3:
-                list($part1, $part2, $part3) = $parts;
-                return $this->$part1->$part2->$part3;
-            break;
-            case 4:
-                list($part1, $part2, $part3, $part4) = $parts;
-                return $this->$part1->$part2->$part3->$part4;
-            break;
-            case 5:
-                list($part1, $part2, $part3, $part4, $part5) = $parts;
-                return $this->$part1->$part2->$part3->$part4->$part5;
-            break;
-        }
-
-        return null;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function __set($property, $value)
-    {
-        if ( ! strstr($property, DbConfig::STORAGE_SEPARATOR)) {
-            parent::__set($property, $value);
-        }
-
-        $parts = explode(DbConfig::STORAGE_SEPARATOR, $property);
-
-        switch (count($parts)){
-            case 2:
-                list($part1, $part2) = $parts;
-                $this->$part1->$part2 = $value;
-            break;
-            case 3:
-                list($part1, $part2, $part3) = $parts;
-                $this->$part1->$part2->$part3 = $value;
-            break;
-            case 4:
-                list($part1, $part2, $part3, $part4) = $parts;
-                $this->$part1->$part2->$part3->$part4 = $value;
-            break;
-            case 5:
-                list($part1, $part2, $part3, $part4, $part5) = $parts;
-                $this->$part1->$part2->$part3->$part4->$part5 = $value;
-            break;
-        }
-    }
 
     /**
      * @inheritdoc
