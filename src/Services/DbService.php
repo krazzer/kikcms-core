@@ -3,11 +3,13 @@
 namespace KikCmsCore\Services;
 
 use DateTime;
+use KikCMS\Config\KikCMSConfig;
 use KikCmsCore\Classes\Model;
 use KikCmsCore\Config\DbConfig;
 use KikCmsCore\Classes\ObjectList;
 use KikCmsCore\Classes\ObjectMap;
 use KikCmsCore\Exceptions\DbForeignKeyDeleteException;
+use Monolog\Logger;
 use Phalcon\Db;
 use Phalcon\Db\ResultInterface;
 use Phalcon\Di\Injectable;
@@ -16,6 +18,7 @@ use Phalcon\Mvc\Model\Resultset;
 
 /**
  * Adds convenience functions to Phalcon's Db Handling
+ * @property Logger $logger
  */
 class DbService extends Injectable
 {
@@ -37,6 +40,10 @@ class DbService extends Injectable
         try {
             return $this->db->delete($table, $whereClause);
         } catch (\Exception $e) {
+            if($this->config->application->env == KikCMSConfig::ENV_DEV){
+                $this->logger->log(Logger::ERROR, $e);
+            }
+
             if ($e->errorInfo[1] == DbConfig::ERROR_CODE_FK_CONSTRAINT_FAIL) {
                 throw new DbForeignKeyDeleteException();
             } else {
