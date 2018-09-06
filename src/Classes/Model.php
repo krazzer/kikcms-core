@@ -25,6 +25,42 @@ class Model extends \Phalcon\Mvc\Model
 
     /**
      * @inheritdoc
+     */
+    public function hasOne($fields, $referenceModel, $referencedFields, $options = null)
+    {
+        $options = $this->updateDefaults($options);
+        parent::hasOne($fields, $referenceModel, $referencedFields, $options);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function belongsTo($fields, $referenceModel, $referencedFields, $options = null)
+    {
+        $options = $this->updateDefaults($options);
+        parent::belongsTo($fields, $referenceModel, $referencedFields, $options);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function hasMany($fields, $referenceModel, $referencedFields, $options = null)
+    {
+        $options = $this->updateDefaults($options);
+        parent::hasMany($fields, $referenceModel, $referencedFields, $options);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function hasManyToMany($fields, $intermediateModel, $intermediateFields, $intermediateReferencedFields, $referenceModel, $referencedFields, $options = null)
+    {
+        $options = $this->updateDefaults($options);
+        parent::hasManyToMany($fields, $intermediateModel, $intermediateFields, $intermediateReferencedFields, $referenceModel, $referencedFields, $options);
+    }
+
+    /**
+     * @inheritdoc
      *
      * @return Resultset
      */
@@ -171,6 +207,8 @@ class Model extends \Phalcon\Mvc\Model
      */
     public function save($data = null, $whiteList = null)
     {
+        $this->setRelationDefaults();
+
         $saved = parent::save($data, $whiteList);
 
         if ($messages = $this->getMessages()) {
@@ -180,5 +218,56 @@ class Model extends \Phalcon\Mvc\Model
         }
 
         return $saved;
+    }
+
+    /**
+     * The defaults option must always fetch results with those default values
+     *
+     * @param array $options
+     * @return array
+     */
+    private function updateDefaults(array $options): array
+    {
+        if( ! isset($options['defaults'])){
+            return $options;
+        }
+
+        if($currentCondition = $options['params']['conditions']){
+            $conditions = [$currentCondition];
+        } else {
+            $conditions = [];
+        }
+
+        foreach ($options['defaults'] as $key => $value){
+            $conditions[] = $key . ' = "' . $value . '"';
+        }
+
+        $options['params']['conditions'] = implode(' AND ', $conditions);
+
+        return $options;
+    }
+
+    /**
+     * If a relation has the 'defaults' option, it will check here if those default values are set, and if not, sets them
+     */
+    private function setRelationDefaults()
+    {
+        $relations = $this->getModelsManager()->getRelations(get_class($this));
+
+        foreach ($relations as $relation){
+            if( ! $defaults = $relation->getOption('defaults')) {
+                continue;
+            }
+
+            $alias = $relation->getOption('alias');
+
+            if( ! $this->$alias){
+                continue;
+            }
+
+            foreach ($defaults as $key => $value){
+                $this->$alias->$key = $value;
+            }
+        }
     }
 }
