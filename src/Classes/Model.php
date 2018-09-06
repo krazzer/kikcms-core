@@ -3,6 +3,7 @@
 namespace KikCmsCore\Classes;
 
 use Exception;
+use KikCMS\Services\LanguageService;
 use ReflectionClass;
 use Phalcon\Mvc\Model\Resultset;
 
@@ -218,6 +219,17 @@ class Model extends \Phalcon\Mvc\Model
         }
 
         return $saved;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getLanguages(): array
+    {
+        /** @var LanguageService $languageService */
+        $languageService = $this->getDI()->get('languageService');
+
+        return $languageService->getLanguages();
     }
 
     /**
