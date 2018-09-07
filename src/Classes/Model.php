@@ -244,7 +244,7 @@ class Model extends \Phalcon\Mvc\Model
             return $options;
         }
 
-        if($currentCondition = $options['params']['conditions']){
+        if($currentCondition = @$options['params']['conditions']){
             $conditions = [$currentCondition];
         } else {
             $conditions = [];
