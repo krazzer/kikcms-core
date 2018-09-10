@@ -304,6 +304,10 @@ class ObjectMap extends ObjectList implements ObjectMapInterface
      */
     protected function getKeyForObject($object)
     {
+        if($object instanceof Model && property_exists($object, 'id')){
+            return $object->id;
+        }
+
         return ($object instanceof Identifiable)
             ? $object->getId()
             : null;
