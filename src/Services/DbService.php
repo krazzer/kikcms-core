@@ -436,9 +436,10 @@ class DbService extends Injectable
      * ]
      *
      * @param Builder $query
+     * @param bool $removeEmptyValues
      * @return array
      */
-    public function getKeyedValues(Builder $query): array
+    public function getKeyedValues(Builder $query, bool $removeEmptyValues = false): array
     {
         $rows        = $this->getRows($query);
         $keyedValues = [];
@@ -450,6 +451,10 @@ class DbService extends Injectable
 
             if ( ! array_key_exists($firstValue, $keyedValues)) {
                 $keyedValues[$firstValue] = [];
+            }
+
+            if( ! $secondValue && $removeEmptyValues){
+                continue;
             }
 
             $keyedValues[$firstValue][] = $secondValue;
