@@ -3,6 +3,7 @@
 namespace KikCmsCore\Classes;
 
 use Exception;
+use KikCMS\Models\TranslationKey;
 use KikCMS\Services\LanguageService;
 use ReflectionClass;
 use Phalcon\Mvc\Model\Resultset;
@@ -11,6 +12,15 @@ class Model extends \Phalcon\Mvc\Model
 {
     const TABLE = null;
     const ALIAS = null;
+
+    /**
+     * Adds a relation for translating the given field, with <field>Key
+     * @param string $field
+     */
+    public function addTranslationRelation(string $field)
+    {
+        $this->belongsTo($field, TranslationKey::class, TranslationKey::FIELD_ID, ['alias' => $field . 'Key']);
+    }
 
     /**
      * @inheritdoc
