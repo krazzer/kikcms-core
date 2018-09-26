@@ -232,6 +232,16 @@ class Model extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Unset a related value, note that this not delete a stored record
+     *
+     * @param string $alias
+     */
+    public function unsetRelation(string $alias)
+    {
+        unset($this->_related[strtolower($alias)]);
+    }
+
+    /**
      * @return array
      */
     protected function getLanguages(): array
