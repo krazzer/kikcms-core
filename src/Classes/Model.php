@@ -5,6 +5,7 @@ namespace KikCmsCore\Classes;
 use Exception;
 use KikCMS\Models\TranslationKey;
 use KikCMS\Services\LanguageService;
+use KikCMS\Util\StringUtil;
 use ReflectionClass;
 use Phalcon\Mvc\Model\Resultset;
 
@@ -19,7 +20,8 @@ class Model extends \Phalcon\Mvc\Model
      */
     public function addTranslationRelation(string $field)
     {
-        $this->belongsTo($field, TranslationKey::class, TranslationKey::FIELD_ID, ['alias' => $field . 'Key']);
+        $alias = StringUtil::underscoresToCamelCase($field) . 'Key';
+        $this->belongsTo($field, TranslationKey::class, TranslationKey::FIELD_ID, ['alias' => $alias]);
     }
 
     /**
