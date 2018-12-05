@@ -6,6 +6,8 @@ use Exception;
 use KikCMS\Models\TranslationKey;
 use KikCMS\Services\LanguageService;
 use KikCMS\Util\StringUtil;
+use KikCmsCore\Config\DbConfig;
+use KikCmsCore\Exceptions\DbForeignKeyDeleteException;
 use ReflectionClass;
 use Phalcon\Mvc\Model\Resultset;
 
@@ -52,6 +54,22 @@ class Model extends \Phalcon\Mvc\Model
     {
         $options = $this->updateDefaults($options);
         parent::belongsTo($fields, $referenceModel, $referencedFields, $options);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function delete()
+    {
+        try {
+            return parent::delete();
+        } catch (Exception $e) {
+            if ($e->errorInfo[1] == DbConfig::ERROR_CODE_FK_CONSTRAINT_FAIL) {
+                throw new DbForeignKeyDeleteException();
+            } else {
+                throw $e;
+            }
+        }
     }
 
     /**
@@ -262,17 +280,17 @@ class Model extends \Phalcon\Mvc\Model
      */
     private function updateDefaults(array $options): array
     {
-        if( ! isset($options['defaults'])){
+        if ( ! isset($options['defaults'])) {
             return $options;
         }
 
-        if(isset($options['params']['conditions']) && $currentCondition = $options['params']['conditions']){
+        if (isset($options['params']['conditions']) && $currentCondition = $options['params']['conditions']) {
             $conditions = [$currentCondition];
         } else {
             $conditions = [];
         }
 
-        foreach ($options['defaults'] as $key => $value){
+        foreach ($options['defaults'] as $key => $value) {
             $conditions[] = $key . ' = "' . $value . '"';
         }
 
@@ -288,18 +306,18 @@ class Model extends \Phalcon\Mvc\Model
     {
         $relations = $this->getModelsManager()->getRelations(get_class($this));
 
-        foreach ($relations as $relation){
-            if( ! $defaults = $relation->getOption('defaults')) {
+        foreach ($relations as $relation) {
+            if ( ! $defaults = $relation->getOption('defaults')) {
                 continue;
             }
 
             $alias = $relation->getOption('alias');
 
-            if( ! $this->$alias){
+            if ( ! $this->$alias) {
                 continue;
             }
 
-            foreach ($defaults as $key => $value){
+            foreach ($defaults as $key => $value) {
                 $this->$alias->$key = $value;
             }
         }
