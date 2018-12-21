@@ -40,7 +40,7 @@ class DbService extends Injectable
         try {
             return $this->db->delete($table, $whereClause);
         } catch (\Exception $e) {
-            if($this->config->application->env == KikCMSConfig::ENV_DEV){
+            if ($this->config->application->env == KikCMSConfig::ENV_DEV) {
                 $this->logger->log(Logger::ERROR, $e);
             }
 
@@ -355,12 +355,12 @@ class DbService extends Injectable
      *
      * $result = [
      *      21 => [
-     *          'name'     => 'Justin',
-     *          'email'    => 'justin@justin.com',
+     *          'name'  => 'Justin',
+     *          'email' => 'justin@justin.com',
      *      ],
      *      26 => [
-     *          'name'     => 'Pete',
-     *          'email'    => 'pete@pete.com',
+     *          'name'  => 'Pete',
+     *          'email' => 'pete@pete.com',
      *      ]
      * ]
      *
@@ -413,7 +413,7 @@ class DbService extends Injectable
             $secondColumn = $row[1];
             $thirdColumn  = $row[2];
 
-            if ( ! array_key_exists($firstColumn, $keyedRows)){
+            if ( ! array_key_exists($firstColumn, $keyedRows)) {
                 $keyedRows[$firstColumn] = [];
             }
 
@@ -453,7 +453,7 @@ class DbService extends Injectable
                 $keyedValues[$firstValue] = [];
             }
 
-            if( ! $secondValue && $removeEmptyValues){
+            if ( ! $secondValue && $removeEmptyValues) {
                 continue;
             }
 
@@ -479,11 +479,19 @@ class DbService extends Injectable
 
     /**
      * @param Builder $query
-     * @return Resultset
+     * @return Model[]
      */
-    public function getObjects(Builder $query): Resultset
+    public function getObjects(Builder $query): array
     {
-        return $query->getQuery()->execute();
+        $results = $query->getQuery()->execute();
+
+        $objects = [];
+
+        foreach ($results as $result) {
+            $objects[] = $result;
+        }
+
+        return $objects;
     }
 
     /**
