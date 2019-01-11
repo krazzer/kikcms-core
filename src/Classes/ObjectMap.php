@@ -29,6 +29,19 @@ class ObjectMap extends ObjectList implements ObjectMapInterface
      */
     protected $keys = [];
 
+    /**
+     * ObjectList constructor.
+     *
+     * @param object[] $objects
+     */
+    public function __construct($objects = [])
+    {
+        foreach ($objects as $key => $object)
+        {
+            $this->add($object, $key);
+        }
+    }
+
     /** @inheritdoc */
     public function clear()
     {
