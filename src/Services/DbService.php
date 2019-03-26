@@ -53,11 +53,15 @@ class DbService extends Injectable
     }
 
     /**
-     * @param string $value
+     * @param string|null $value
      * @return string
      */
-    public function escape(string $value): string
+    public function escape(?string $value): string
     {
+        if($value === null){
+            return 'NULL';
+        }
+
         return $this->db->escapeString($value);
     }
 
@@ -203,11 +207,7 @@ class DbService extends Injectable
             $insertValues = [];
 
             foreach ($dataChunk as $row) {
-                $row = array_map(function ($value) {
-                    return $this->escape($value);
-                }, $row);
-
-                $insertValues[] = '(' . implode(',', $row) . ')';
+                $insertValues[] = '(' . implode(',', array_map([$this, 'escape'], $row)) . ')';
             }
 
             $this->db->query(

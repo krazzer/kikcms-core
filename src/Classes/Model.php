@@ -39,6 +39,14 @@ class Model extends \Phalcon\Mvc\Model
     }
 
     /**
+     * @return string
+     */
+    public function getClassName(): string
+    {
+        return static::class;
+    }
+
+    /**
      * @inheritdoc
      */
     public function hasOne($fields, $referenceModel, $referencedFields, $options = null)
@@ -84,10 +92,13 @@ class Model extends \Phalcon\Mvc\Model
     /**
      * @inheritdoc
      */
-    public function hasManyToMany($fields, $intermediateModel, $intermediateFields, $intermediateReferencedFields, $referenceModel, $referencedFields, $options = null)
+    public function hasManyToMany($fields, $intermediateModel, $intermediateFields, $intermediateReferencedFields,
+                                  $referenceModel, $referencedFields, $options = null)
     {
         $options = $this->updateDefaults($options);
-        parent::hasManyToMany($fields, $intermediateModel, $intermediateFields, $intermediateReferencedFields, $referenceModel, $referencedFields, $options);
+
+        parent::hasManyToMany($fields, $intermediateModel, $intermediateFields, $intermediateReferencedFields,
+            $referenceModel, $referencedFields, $options);
     }
 
     /**
