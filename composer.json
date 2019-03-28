@@ -1,7 +1,7 @@
 {
   "name": "kiksaus/kikcms-core",
   "require": {
-    "swiftmailer/swiftmailer": "^6.0",
+    "swiftmailer/swiftmailer": "5.4.*",
     "monolog/monolog": "^1.22"
   },
   "autoload": {
