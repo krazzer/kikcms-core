@@ -153,7 +153,37 @@ function dlog()
     error_log(print_r($args, true));
 }
 
+/**
+ * @param float $microseconds
+ * @param null $name
+ */
 function dlogtime(float $microseconds, $name = null)
 {
     dlog(($name ? $name . ': ' : '') . ((microtime(true) - $microseconds) * 1000));
+}
+
+/**
+ * @param string $haystack
+ * @param string $needle
+ * @return string
+ */
+function str_startswith(string $haystack, string $needle): string
+{
+    $length = strlen($needle);
+    return (substr($haystack, 0, $length) === $needle);
+}
+
+/**
+ * @param string $haystack
+ * @param string $needle
+ * @return string
+ */
+function str_endswith(string $haystack, string $needle): string
+{
+    $length = strlen($needle);
+    if ($length == 0) {
+        return true;
+    }
+
+    return (substr($haystack, -$length) === $needle);
 }
