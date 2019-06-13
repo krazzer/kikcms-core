@@ -3,9 +3,6 @@
 namespace KikCmsCore\Classes;
 
 use Exception;
-use KikCMS\Models\TranslationKey;
-use KikCMS\Services\LanguageService;
-use KikCMS\Util\StringUtil;
 use KikCmsCore\Config\DbConfig;
 use KikCmsCore\Exceptions\DbForeignKeyDeleteException;
 use ReflectionClass;
@@ -15,16 +12,6 @@ class Model extends \Phalcon\Mvc\Model
 {
     const TABLE = null;
     const ALIAS = null;
-
-    /**
-     * Adds a relation for translating the given field, with <field>Key
-     * @param string $field
-     */
-    public function addTranslationRelation(string $field)
-    {
-        $alias = StringUtil::underscoresToCamelCase($field) . 'Key';
-        $this->belongsTo($field, TranslationKey::class, TranslationKey::FIELD_ID, ['alias' => $alias]);
-    }
 
     /**
      * @inheritdoc
@@ -270,17 +257,6 @@ class Model extends \Phalcon\Mvc\Model
     public function unsetRelation(string $alias)
     {
         unset($this->_related[strtolower($alias)]);
-    }
-
-    /**
-     * @return array
-     */
-    protected function getLanguages(): array
-    {
-        /** @var LanguageService $languageService */
-        $languageService = $this->getDI()->get('languageService');
-
-        return $languageService->getLanguages();
     }
 
     /**
