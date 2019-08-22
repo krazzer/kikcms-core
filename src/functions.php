@@ -4,12 +4,12 @@
  * Add a value to an array after a certain key
  *
  * @param array $subject
- * @param string $keyToAddAfter
+ * @param mixed $keyToAddAfter
  * @param string $keyToAdd
  * @param $valueToAdd
  * @return array
  */
-function array_add_after_key(array $subject, string $keyToAddAfter, string $keyToAdd, $valueToAdd): array
+function array_add_after_key(array $subject, $keyToAddAfter, string $keyToAdd, $valueToAdd): array
 {
     $index = array_search($keyToAddAfter, array_keys($subject));
 
