@@ -15,6 +15,7 @@ use Phalcon\Db\ResultInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Mvc\Model\Resultset;
+use Phalcon\Mvc\Model\Row;
 
 /**
  * Adds convenience functions to Phalcon's Db Handling
@@ -595,6 +596,10 @@ class DbService extends Injectable
         $table = [];
 
         foreach ($rows as $row) {
+            if($row instanceof Row) {
+                $row = $row->toArray();
+            }
+
             $firstKey  = array_values($row)[0];
             $secondKey = array_values($row)[1];
 
