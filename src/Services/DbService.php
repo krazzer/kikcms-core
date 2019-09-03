@@ -408,6 +408,10 @@ class DbService extends Injectable
         $keyedRows = [];
 
         foreach ($rows as $row) {
+            if ($row instanceof Row) {
+                $row = $row->toArray();
+            }
+
             $row = array_values($row);
 
             $firstColumn  = $row[0];
@@ -419,6 +423,56 @@ class DbService extends Injectable
             }
 
             $keyedRows[$firstColumn][$secondColumn] = $thirdColumn;
+        }
+
+        return $keyedRows;
+    }
+
+    /**
+     * Build up an array like:
+     *
+     * $result = [
+     *      firstColumn => [
+     *          secondColumn => [
+     *              thirdColumn => fourthColumn,
+     *              thirdColumn => fourthColumn,
+     *          ],
+     *          secondColumn => [
+     *              thirdColumn => fourthColumn,
+     *              thirdColumn => fourthColumn,
+     *          ],
+     *      ],
+     * ]
+     *
+     * @param Builder $query
+     * @return array
+     */
+    public function get4dTableAssoc(Builder $query): array
+    {
+        $rows      = $this->getRows($query);
+        $keyedRows = [];
+
+        foreach ($rows as $row) {
+            if ($row instanceof Row) {
+                $row = $row->toArray();
+            }
+
+            $row = array_values($row);
+
+            $firstColumn  = $row[0];
+            $secondColumn = $row[1];
+            $thirdColumn  = $row[2];
+            $fourthColumn = $row[3];
+
+            if ( ! array_key_exists($firstColumn, $keyedRows)) {
+                $keyedRows[$firstColumn] = [];
+            }
+
+            if ( ! array_key_exists($secondColumn, $keyedRows[$firstColumn])) {
+                $keyedRows[$firstColumn][$secondColumn] = [];
+            }
+
+            $keyedRows[$firstColumn][$secondColumn][$thirdColumn] = $fourthColumn;
         }
 
         return $keyedRows;
