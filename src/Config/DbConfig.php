@@ -5,7 +5,8 @@ namespace KikCmsCore\Config;
 
 class DbConfig
 {
-    const ERROR_CODE_FK_CONSTRAINT_FAIL = 1451;
+    const ERROR_CODE_FK_CONSTRAINT_FAIL        = 1451;
+    const ERROR_CODE_TOO_MANY_USER_CONNECTIONS = 1226;
 
     const SQL_DATE_FORMAT     = 'Y-m-d';
     const SQL_DATETIME_FORMAT = 'Y-m-d H:i:s';
