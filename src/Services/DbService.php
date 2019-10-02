@@ -3,13 +3,15 @@
 namespace KikCmsCore\Services;
 
 use DateTime;
-use KikCMS\Config\KikCMSConfig;
+use Exception;
+use InvalidArgumentException;
 use KikCmsCore\Classes\Model;
 use KikCmsCore\Config\DbConfig;
 use KikCmsCore\Classes\ObjectList;
 use KikCmsCore\Classes\ObjectMap;
 use KikCmsCore\Exceptions\DbForeignKeyDeleteException;
 use Monolog\Logger;
+use Phalcon\Config;
 use Phalcon\Db;
 use Phalcon\Db\ResultInterface;
 use Phalcon\Di\Injectable;
@@ -20,6 +22,7 @@ use Phalcon\Mvc\Model\Row;
 /**
  * Adds convenience functions to Phalcon's Db Handling
  * @property Logger $logger
+ * @property Config $config
  */
 class DbService extends Injectable
 {
@@ -27,7 +30,7 @@ class DbService extends Injectable
      * @param string $model
      * @param array $where
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(string $model, array $where)
     {
@@ -40,8 +43,8 @@ class DbService extends Injectable
 
         try {
             return $this->db->delete($table, $whereClause);
-        } catch (\Exception $e) {
-            if ($this->config->application->env == KikCMSConfig::ENV_DEV) {
+        } catch (Exception $e) {
+            if ($this->config->application->env == 'dev') {
                 $this->logger->log(Logger::ERROR, $e);
             }
 
@@ -243,7 +246,7 @@ class DbService extends Injectable
         $columns = (array) $query->getColumns();
 
         if (count($columns) !== 2) {
-            throw new \InvalidArgumentException('The query must request two columns');
+            throw new InvalidArgumentException('The query must request two columns');
         }
 
         $results = $query->getQuery()->execute()->toArray();
@@ -298,7 +301,7 @@ class DbService extends Injectable
         $columns = (array) $query->getColumns();
 
         if (count($columns) !== 1) {
-            throw new \InvalidArgumentException('The query must request a single column');
+            throw new InvalidArgumentException('The query must request a single column');
         }
 
         $result = $query->getQuery()->execute();
@@ -321,7 +324,7 @@ class DbService extends Injectable
         $columns = (array) $query->getColumns();
 
         if (count($columns) !== 1) {
-            throw new \InvalidArgumentException('The query must request a single column');
+            throw new InvalidArgumentException('The query must request a single column');
         }
 
         $results = $query->getQuery()->execute()->toArray();
