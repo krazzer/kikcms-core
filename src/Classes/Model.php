@@ -59,7 +59,7 @@ class Model extends \Phalcon\Mvc\Model
         try {
             return parent::delete();
         } catch (Exception $e) {
-            if ($e->errorInfo[1] == DbConfig::ERROR_CODE_FK_CONSTRAINT_FAIL) {
+            if (isset($e->errorInfo) && $e->errorInfo[1] == DbConfig::ERROR_CODE_FK_CONSTRAINT_FAIL) {
                 throw new DbForeignKeyDeleteException();
             } else {
                 throw $e;
