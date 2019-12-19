@@ -2,6 +2,7 @@
 
 namespace KikCmsCore\Services;
 
+use Closure;
 use DateTime;
 use Exception;
 use InvalidArgumentException;
@@ -62,7 +63,7 @@ class DbService extends Injectable
      */
     public function escape(?string $value): string
     {
-        if($value === null){
+        if ($value === null) {
             return 'NULL';
         }
 
@@ -653,7 +654,7 @@ class DbService extends Injectable
         $table = [];
 
         foreach ($rows as $row) {
-            if($row instanceof Row) {
+            if ($row instanceof Row) {
                 $row = $row->toArray();
             }
 
@@ -720,6 +721,32 @@ class DbService extends Injectable
         }
 
         return $valueMap;
+    }
+
+    /**
+     * @param Closure $action
+     * @param bool $throwException
+     * @return bool
+     * @throws Exception
+     */
+    public function transaction(Closure $action, $throwException = true): bool
+    {
+        $this->db->begin();
+
+        try {
+            $action();
+        } catch (Exception $exception) {
+            $this->logger->log(Logger::ERROR, $exception);
+            $this->db->rollback();
+
+            if ($throwException) {
+                throw $exception;
+            }
+
+            return false;
+        }
+
+        return $this->db->commit();
     }
 
     /**
