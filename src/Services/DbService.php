@@ -193,32 +193,39 @@ class DbService extends Injectable
     /**
      * @param string $model
      * @param array $insertData
-     *
+     * @param bool $updateOnDuplicateKey
      * @return bool
      */
-    public function insertBulk(string $model, array $insertData): bool
+    public function insertBulk(string $model, array $insertData, bool $updateOnDuplicateKey = false): bool
     {
         if (empty($insertData)) {
             return true;
         }
 
-        $keys = array_keys($insertData[0]);
-
-        $insertDataChunks = array_chunk($insertData, 1000);
+        $keys   = array_keys($insertData[0]);
+        $chunks = array_chunk($insertData, 1000);
 
         $this->db->begin();
 
-        foreach ($insertDataChunks as $dataChunk) {
+        foreach ($chunks as $dataChunk) {
             $insertValues = [];
 
             foreach ($dataChunk as $row) {
                 $insertValues[] = '(' . implode(',', array_map([$this, 'escape'], $row)) . ')';
             }
 
-            $this->db->query(
-                "INSERT" . " INTO " . $this->getTableForModel($model) . " (" . implode(',', $keys) . ")" .
-                "VALUES " . implode(',', $insertValues)
-            );
+            $query = "INSERT" . " INTO " . $this->getTableForModel($model) . " (" . implode(',', $keys) . ")" .
+                "VALUES " . implode(',', $insertValues);
+
+            if ($updateOnDuplicateKey) {
+                $updateStatements = array_map(function ($key) {
+                    return $key . ' = VALUES(' . $key . ')';
+                }, $keys);
+
+                $query .= ' ON DUPLICATE KEY UPDATE ' . implode(', ', $updateStatements);
+            }
+
+            $this->db->query($query);
         }
 
         return $this->db->commit();
