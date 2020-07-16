@@ -565,7 +565,7 @@ class DbService extends Injectable
      * @param string $class
      * @return ObjectList|mixed
      */
-    public function getObjectList(Builder $query, string $class): ObjectList
+    public function getObjectList(Builder $query, string $class = ObjectList::class): ObjectList
     {
         /** @var ObjectList $objectList */
         $objectList = new $class();
