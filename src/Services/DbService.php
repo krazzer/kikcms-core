@@ -63,7 +63,7 @@ class DbService extends Injectable
      */
     public function escape(?string $value): string
     {
-        if ($value === null) {
+        if ($value === null || $value === '') {
             return 'NULL';
         }
 
