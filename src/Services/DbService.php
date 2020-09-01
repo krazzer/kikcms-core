@@ -178,14 +178,18 @@ class DbService extends Injectable
     /**
      * @param string $model
      * @param array $insert
-     *
+     * @param bool $updateOnDuplicateKey
      * @return int
      */
-    public function insert(string $model, array $insert): int
+    public function insert(string $model, array $insert, bool $updateOnDuplicateKey = false): int
     {
         $table = $this->getTableForModel($model);
 
-        $this->db->insert($table, array_values($insert), array_keys($insert));
+        if ($updateOnDuplicateKey) {
+            $this->db->query($this->getInsertQuery($model, [$insert], true));
+        } else {
+            $this->db->insert($table, array_values($insert), array_keys($insert));
+        }
 
         return $this->db->lastInsertId();
     }
@@ -202,30 +206,12 @@ class DbService extends Injectable
             return true;
         }
 
-        $keys   = array_keys($insertData[0]);
         $chunks = array_chunk($insertData, 1000);
 
         $this->db->begin();
 
-        foreach ($chunks as $dataChunk) {
-            $insertValues = [];
-
-            foreach ($dataChunk as $row) {
-                $insertValues[] = '(' . implode(',', array_map([$this, 'escape'], $row)) . ')';
-            }
-
-            $query = "INSERT" . " INTO " . $this->getTableForModel($model) . " (" . implode(',', $keys) . ")" .
-                "VALUES " . implode(',', $insertValues);
-
-            if ($updateOnDuplicateKey) {
-                $updateStatements = array_map(function ($key) {
-                    return $key . ' = VALUES(' . $key . ')';
-                }, $keys);
-
-                $query .= ' ON DUPLICATE KEY UPDATE ' . implode(', ', $updateStatements);
-            }
-
-            $this->db->query($query);
+        foreach ($chunks as $rows) {
+            $this->db->query($this->getInsertQuery($model, $rows, $updateOnDuplicateKey));
         }
 
         return $this->db->commit();
@@ -754,6 +740,35 @@ class DbService extends Injectable
         }
 
         return $this->db->commit();
+    }
+
+    /**
+     * @param string $model
+     * @param array $rows
+     * @param bool $updateOnDuplicateKey
+     * @return string
+     */
+    private function getInsertQuery(string $model, array $rows, bool $updateOnDuplicateKey = false): string
+    {
+        $keys   = array_keys($rows[0]);
+        $values = [];
+
+        foreach ($rows as $row) {
+            $values[] = '(' . implode(',', array_map([$this, 'escape'], $row)) . ')';
+        }
+
+        $query = "INSERT" . " INTO " . $this->getTableForModel($model) . " (" . implode(',', $keys) . ")" .
+            "VALUES " . implode(',', $values);
+
+        if ($updateOnDuplicateKey) {
+            $updateStatements = array_map(function ($key) {
+                return $key . ' = VALUES(' . $key . ')';
+            }, $keys);
+
+            $query .= ' ON DUPLICATE KEY UPDATE ' . implode(', ', $updateStatements);
+        }
+
+        return $query;
     }
 
     /**

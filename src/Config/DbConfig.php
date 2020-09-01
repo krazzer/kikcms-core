@@ -7,6 +7,7 @@ class DbConfig
 {
     const ERROR_CODE_FK_CONSTRAINT_FAIL        = 1451;
     const ERROR_CODE_TOO_MANY_USER_CONNECTIONS = 1226;
+    const ERROR_CODE_DUPLICATE_ENTRY           = 1062;
 
     const NAME_FIELD = 'name';
 
