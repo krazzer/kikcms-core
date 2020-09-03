@@ -8,6 +8,8 @@ class DbConfig
     const ERROR_CODE_FK_CONSTRAINT_FAIL        = 1451;
     const ERROR_CODE_TOO_MANY_USER_CONNECTIONS = 1226;
     const ERROR_CODE_DUPLICATE_ENTRY           = 1062;
+    const ERROR_CODE_UNKNOWN_DB                = 1049;
+    const ERROR_CODE_ACCESS_DENIED             = 1045;
 
     const NAME_FIELD = 'name';
 
