@@ -5,6 +5,8 @@ namespace KikCmsCore\Classes;
 use Exception;
 use KikCmsCore\Config\DbConfig;
 use KikCmsCore\Exceptions\DbForeignKeyDeleteException;
+use Phalcon\Mvc\Model\Relation;
+use Phalcon\Mvc\Model\ResultsetInterface;
 use ReflectionClass;
 use Phalcon\Mvc\Model\Resultset;
 
@@ -33,25 +35,25 @@ class Model extends \Phalcon\Mvc\Model
     /**
      * @inheritdoc
      */
-    public function hasOne($fields, $referenceModel, $referencedFields, $options = null)
+    public function hasOne($fields, $referenceModel, $referencedFields, $options = null): Relation
     {
         $options = $this->updateDefaults($options);
-        parent::hasOne($fields, $referenceModel, $referencedFields, $options);
+        return parent::hasOne($fields, $referenceModel, $referencedFields, $options);
     }
 
     /**
      * @inheritdoc
      */
-    public function belongsTo($fields, $referenceModel, $referencedFields, $options = null)
+    public function belongsTo($fields, $referenceModel, $referencedFields, $options = null): Relation
     {
         $options = $this->updateDefaults($options);
-        parent::belongsTo($fields, $referenceModel, $referencedFields, $options);
+        return parent::belongsTo($fields, $referenceModel, $referencedFields, $options);
     }
 
     /**
      * @inheritdoc
      */
-    public function delete()
+    public function delete(): bool
     {
         try {
             return parent::delete();
@@ -67,21 +69,21 @@ class Model extends \Phalcon\Mvc\Model
     /**
      * @inheritdoc
      */
-    public function hasMany($fields, $referenceModel, $referencedFields, $options = null)
+    public function hasMany($fields, $referenceModel, $referencedFields, $options = null): Relation
     {
         $options = $this->updateDefaults($options);
-        parent::hasMany($fields, $referenceModel, $referencedFields, $options);
+        return parent::hasMany($fields, $referenceModel, $referencedFields, $options);
     }
 
     /**
      * @inheritdoc
      */
     public function hasManyToMany($fields, $intermediateModel, $intermediateFields, $intermediateReferencedFields,
-                                  $referenceModel, $referencedFields, $options = null)
+                                  $referenceModel, $referencedFields, $options = null): Relation
     {
         $options = $this->updateDefaults($options);
 
-        parent::hasManyToMany($fields, $intermediateModel, $intermediateFields, $intermediateReferencedFields,
+        return parent::hasManyToMany($fields, $intermediateModel, $intermediateFields, $intermediateReferencedFields,
             $referenceModel, $referencedFields, $options);
     }
 
@@ -90,7 +92,7 @@ class Model extends \Phalcon\Mvc\Model
      *
      * @return Resultset
      */
-    public static function find($parameters = null)
+    public static function find($parameters = null): ResultsetInterface
     {
         /** @var Resultset $resultSet */
         $resultSet = parent::find($parameters);
@@ -231,11 +233,11 @@ class Model extends \Phalcon\Mvc\Model
     /**
      * @inheritdoc
      */
-    public function save($data = null, $whiteList = null)
+    public function save(): bool
     {
         $this->setRelationDefaults();
 
-        $saved = parent::save($data, $whiteList);
+        $saved = parent::save();
 
         if ($messages = $this->getMessages()) {
             foreach ($messages as $message) {
