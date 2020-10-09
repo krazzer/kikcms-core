@@ -22,6 +22,7 @@ use Phalcon\Mvc\Model\Row;
 
 /**
  * Adds convenience functions to Phalcon's Db Handling
+ *
  * @property Logger $logger
  * @property Config $config
  */

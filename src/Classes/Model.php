@@ -13,9 +13,6 @@ class Model extends \Phalcon\Mvc\Model
     const TABLE = null;
     const ALIAS = null;
 
-    /**
-     * @inheritdoc
-     */
     public function initialize()
     {
         if ( ! static::TABLE) {

@@ -24,7 +24,7 @@ function array_add_after_key(array $subject, $keyToAddAfter, string $keyToAdd, $
 
     $newArrayPart1[$keyToAdd] = $valueToAdd;
 
-    return $newArrayPart1 + $newArrayPart2;
+    return (array) ($newArrayPart1 + $newArrayPart2);
 }
 
 /**
@@ -165,6 +165,7 @@ function dlogtime(float $microseconds, $name = null)
 /**
  * @param string $haystack
  * @param string $needle
+ *
  * @return string
  */
 function str_startswith(string $haystack, string $needle): string
@@ -176,11 +177,13 @@ function str_startswith(string $haystack, string $needle): string
 /**
  * @param string $haystack
  * @param string $needle
+ *
  * @return string
  */
 function str_endswith(string $haystack, string $needle): string
 {
     $length = strlen($needle);
+
     if ($length == 0) {
         return true;
     }

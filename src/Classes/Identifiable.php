@@ -19,6 +19,7 @@ class Identifiable
 
     /**
      * @param mixed $id
+     *
      * @return Identifiable
      */
     public function setId($id)

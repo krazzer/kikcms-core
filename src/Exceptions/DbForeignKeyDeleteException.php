@@ -3,7 +3,8 @@
 namespace KikCmsCore\Exceptions;
 
 
-class DbForeignKeyDeleteException extends \Exception
-{
+use Exception;
 
+class DbForeignKeyDeleteException extends Exception
+{
 }
