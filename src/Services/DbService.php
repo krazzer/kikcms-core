@@ -13,10 +13,10 @@ use KikCmsCore\Classes\ObjectMap;
 use KikCmsCore\Exceptions\DbForeignKeyDeleteException;
 use Monolog\Logger;
 use Phalcon\Config;
-use Phalcon\Db;
 use Phalcon\Db\ResultInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Mvc\Model\Query\Builder;
+use Phalcon\Mvc\Model\Query\BuilderInterface;
 use Phalcon\Mvc\Model\Resultset;
 use Phalcon\Mvc\Model\Row;
 
@@ -490,11 +490,11 @@ class DbService extends Injectable
      *      ]
      * ]
      *
-     * @param Builder $query
+     * @param BuilderInterface $query
      * @param bool $removeEmptyValues
      * @return array
      */
-    public function getKeyedValues(Builder $query, bool $removeEmptyValues = false): array
+    public function getKeyedValues(BuilderInterface $query, bool $removeEmptyValues = false): array
     {
         $rows        = $this->getRows($query);
         $keyedValues = [];
@@ -523,7 +523,7 @@ class DbService extends Injectable
      *
      * @return null|Model|mixed
      */
-    public function getObject(Builder $query): ?Model
+    public function getObject(BuilderInterface $query): ?Model
     {
         if ( ! $object = $query->getQuery()->execute()->getFirst()) {
             return null;
@@ -589,10 +589,10 @@ class DbService extends Injectable
     }
 
     /**
-     * @param Builder $query
+     * @param BuilderInterface $query
      * @return array
      */
-    public function getRows(Builder $query): array
+    public function getRows(BuilderInterface $query): array
     {
         return $query->getQuery()->execute()->toArray();
     }
