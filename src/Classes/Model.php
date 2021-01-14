@@ -140,7 +140,7 @@ class Model extends \Phalcon\Mvc\Model
      *
      * @return null|Model|mixed
      */
-    public static function findFirst($parameters = null)
+    public static function findFirst($parameters = null): ?Model
     {
         $object = parent::findFirst($parameters);
 
