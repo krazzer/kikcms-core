@@ -13,6 +13,7 @@ use KikCmsCore\Classes\ObjectMap;
 use KikCmsCore\Exceptions\DbForeignKeyDeleteException;
 use Monolog\Logger;
 use Phalcon\Config;
+use Phalcon\Db\Enum;
 use Phalcon\Db\ResultInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Mvc\Model\Query\Builder;
@@ -34,7 +35,7 @@ class DbService extends Injectable
      * @return bool
      * @throws Exception
      */
-    public function delete(string $model, array $where)
+    public function delete(string $model, array $where): bool
     {
         $table       = $this->getTableForModel($model);
         $whereClause = $this->getWhereClauseByArray($where);
@@ -92,7 +93,7 @@ class DbService extends Injectable
     {
         $result = $this->db->query($query);
 
-        $result->setFetchMode(Db::FETCH_ASSOC);
+        $result->setFetchMode(Enum::FETCH_ASSOC);
         $resultData = $result->fetchAll();
 
         if ( ! $resultData) {
@@ -129,7 +130,7 @@ class DbService extends Injectable
     {
         $result = $this->db->query($query);
 
-        $result->setFetchMode(Db::FETCH_KEY_PAIR);
+        $result->setFetchMode(Enum::FETCH_KEY_PAIR);
         return $result->fetchAll();
     }
 
@@ -233,10 +234,10 @@ class DbService extends Injectable
     /**
      * Retrieve a map where the first column is the key, the second is the value
      *
-     * @param Builder $query
+     * @param BuilderInterface $query
      * @return array
      */
-    public function getAssoc(Builder $query): array
+    public function getAssoc(BuilderInterface $query): array
     {
         $columns = (array) $query->getColumns();
 
@@ -259,10 +260,10 @@ class DbService extends Injectable
     /**
      * Retrieve DateTime value from the given query
      *
-     * @param Builder $query
+     * @param BuilderInterface $query
      * @return DateTime|null
      */
-    public function getDate(Builder $query): ?DateTime
+    public function getDate(BuilderInterface $query): ?DateTime
     {
         $value = $this->getValue($query);
 
@@ -274,10 +275,10 @@ class DbService extends Injectable
     }
 
     /**
-     * @param Builder $query
+     * @param BuilderInterface $query
      * @return bool
      */
-    public function getExists(Builder $query): bool
+    public function getExists(BuilderInterface $query): bool
     {
         if (count($query->getQuery()->execute())) {
             return true;
@@ -289,10 +290,10 @@ class DbService extends Injectable
     /**
      * Retrieve a single result from the given query
      *
-     * @param Builder $query
+     * @param BuilderInterface $query
      * @return null|string
      */
-    public function getValue(Builder $query): ?string
+    public function getValue(BuilderInterface $query): ?string
     {
         $columns = (array) $query->getColumns();
 
@@ -312,11 +313,11 @@ class DbService extends Injectable
     /**
      * Retrieve an array with a single column from the given query
      *
-     * @param Builder $query
+     * @param BuilderInterface $query
      * @param bool $ignoreMultipleColumns
      * @return array
      */
-    public function getValues(Builder $query, bool $ignoreMultipleColumns = false): array
+    public function getValues(BuilderInterface $query, bool $ignoreMultipleColumns = false): array
     {
         $columns = (array) $query->getColumns();
 
@@ -336,10 +337,10 @@ class DbService extends Injectable
     /**
      * Retrieve an assoc array with a single row from the given query
      *
-     * @param Builder $query
+     * @param BuilderInterface $query
      * @return array
      */
-    public function getRow(Builder $query): array
+    public function getRow(BuilderInterface $query): array
     {
         /** @var Model $result */
         $result = $query->getQuery()->execute()->getFirst();
@@ -365,10 +366,10 @@ class DbService extends Injectable
      *      ]
      * ]
      *
-     * @param Builder $query
+     * @param BuilderInterface $query
      * @return array
      */
-    public function getKeyedRows(Builder $query): array
+    public function getKeyedRows(BuilderInterface $query): array
     {
         $rows      = $this->getRows($query);
         $keyedRows = [];
@@ -399,10 +400,10 @@ class DbService extends Injectable
      *      ]
      * ]
      *
-     * @param Builder $query
+     * @param BuilderInterface $query
      * @return array
      */
-    public function getKeyedAssoc(Builder $query): array
+    public function getKeyedAssoc(BuilderInterface $query): array
     {
         $rows      = $this->getRows($query);
         $keyedRows = [];
@@ -444,10 +445,10 @@ class DbService extends Injectable
      *      ],
      * ]
      *
-     * @param Builder $query
+     * @param BuilderInterface $query
      * @return array
      */
-    public function get4dTableAssoc(Builder $query): array
+    public function get4dTableAssoc(BuilderInterface $query): array
     {
         $rows      = $this->getRows($query);
         $keyedRows = [];
@@ -533,10 +534,10 @@ class DbService extends Injectable
     }
 
     /**
-     * @param Builder $query
+     * @param BuilderInterface $query
      * @return Model[]
      */
-    public function getObjects(Builder $query): array
+    public function getObjects(BuilderInterface $query): array
     {
         $results = $query->getQuery()->execute();
 
@@ -550,11 +551,11 @@ class DbService extends Injectable
     }
 
     /**
-     * @param Builder $query
+     * @param BuilderInterface $query
      * @param string $class
      * @return ObjectList|mixed
      */
-    public function getObjectList(Builder $query, string $class = ObjectList::class): ObjectList
+    public function getObjectList(BuilderInterface $query, string $class = ObjectList::class): ObjectList
     {
         /** @var ObjectList $objectList */
         $objectList = new $class();
@@ -569,12 +570,12 @@ class DbService extends Injectable
     }
 
     /**
-     * @param Builder $query
+     * @param BuilderInterface $query
      * @param string $class
      * @param string $mapBy
      * @return ObjectMap|mixed
      */
-    public function getObjectMap(Builder $query, string $class, string $mapBy = 'id'): ObjectMap
+    public function getObjectMap(BuilderInterface $query, string $class, string $mapBy = 'id'): ObjectMap
     {
         /** @var ObjectMap $objectMap */
         $objectMap = new $class();
@@ -641,10 +642,10 @@ class DbService extends Injectable
      *      ]
      * ]
      *
-     * @param Builder $query
+     * @param BuilderInterface $query
      * @return array
      */
-    public function getTable(Builder $query): array
+    public function getTable(BuilderInterface $query): array
     {
         $rows  = $this->getRows($query);
         $table = [];
