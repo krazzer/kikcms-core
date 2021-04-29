@@ -247,8 +247,9 @@ class DbService extends Injectable
         $results = $query->getQuery()->execute()->toArray();
         $map     = [];
 
-        foreach ($results as $i => $row) {
-            $row                        = (array) $row;
+        foreach ($results as $row) {
+            $row = (array) $row;
+
             $map[array_values($row)[0]] = array_values($row)[1];
         }
 
@@ -312,13 +313,14 @@ class DbService extends Injectable
      * Retrieve an array with a single column from the given query
      *
      * @param Builder $query
+     * @param bool $ignoreMultipleColumns
      * @return array
      */
-    public function getValues(Builder $query): array
+    public function getValues(Builder $query, bool $ignoreMultipleColumns = false): array
     {
         $columns = (array) $query->getColumns();
 
-        if (count($columns) !== 1) {
+        if (count($columns) !== 1 && ! $ignoreMultipleColumns) {
             throw new InvalidArgumentException('The query must request a single column');
         }
 
