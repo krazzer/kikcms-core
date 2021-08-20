@@ -266,8 +266,6 @@ class Model extends \Phalcon\Mvc\Model
      */
     private function updateDefaults(array $options): array
     {
-        $options['reusable'] = true;
-
         if ( ! isset($options['defaults'])) {
             return $options;
         }
