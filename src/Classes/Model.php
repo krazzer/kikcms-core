@@ -255,7 +255,7 @@ class Model extends \Phalcon\Mvc\Model
      */
     public function unsetRelation(string $alias)
     {
-        unset($this->_related[strtolower($alias)]);
+        unset($this->dirtyRelated[strtolower($alias)]);
     }
 
     /**
