@@ -241,6 +241,7 @@ class Model extends \Phalcon\Mvc\Model
 
         if ($messages = $this->getMessages()) {
             foreach ($messages as $message) {
+                $message .= ', data: ' . json_encode($this->toArray()) . ', class:' . get_class($this);
                 throw new Exception($message);
             }
         }
