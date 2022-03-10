@@ -136,6 +136,21 @@ class DbService extends Injectable
 
     /**
      * @param string $query
+     * @return mixed
+     */
+    public function queryValue(string $query)
+    {
+        $result = $this->db->query($query);
+
+        if ($row = $result->fetch()) {
+            return $row[0];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $query
      * @return array
      */
     public function queryValues(string $query): array
