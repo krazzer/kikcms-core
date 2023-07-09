@@ -752,7 +752,7 @@ class DbService extends Injectable
 
         // json encode objects and arrays
         if (is_array($value) || is_object($value)) {
-            return json_encode($value);
+            return json_encode($value, JSON_NUMERIC_CHECK);
         }
 
         return $value;
