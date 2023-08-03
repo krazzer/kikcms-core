@@ -1,5 +1,8 @@
 <?php
 
+use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Symfony\Component\VarDumper\Dumper\CliDumper;
+
 /**
  * Add a value to an array after a certain key
  *
@@ -150,7 +153,44 @@ function dlog()
         $args = $args[0];
     }
 
-    error_log(print_r($args, true));
+    if(class_exists(VarCloner::class) && class_exists(CliDumper::class)) {
+        $cloner = new VarCloner();
+        $dumper = new CliDumper();
+        $output = fopen('php://memory', 'r+b');
+
+        $dumper->dump($cloner->cloneVar($args), $output);
+        $output = stream_get_contents($output, -1, 0);
+
+        error_log($output);
+    } else {
+        $args = dlog_strip_models($args);
+        error_log(print_r($args, true));
+    }
+}
+
+/**
+ * Convert Models to simple array for easier debugging
+ *
+ * @param $args
+ * @return array|mixed|string[]
+ */
+function dlog_strip_models($args)
+{
+    if($args instanceof Phalcon\Mvc\Model){
+        return array_merge(['__CLASS__' => get_class($args)], $args->toArray());
+    }
+
+    if($args instanceof \KikCmsCore\Classes\ObjectList){
+        $args = array_merge(['__CLASS__' => get_class($args)], $args->getObjects());
+    }
+
+    if(is_iterable($args)){
+        foreach ($args as &$arg){
+            $arg = dlog_strip_models($arg);
+        }
+    }
+
+    return $args;
 }
 
 /**
