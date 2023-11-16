@@ -16,6 +16,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 *
 	 * @return self Returns itself to facilitate chaining
 	 */
+    #[\ReturnTypeWillChange]
 	public function clear();
 
 	/**
@@ -23,6 +24,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 *
 	 * @return bool True if current pointer position is valid (not past end, not empty), otherwise false
 	 */
+    #[\ReturnTypeWillChange]
 	public function valid();
 
 	/**
@@ -30,6 +32,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 *
 	 * @return string|int|null Key of current object or null
 	 */
+    #[\ReturnTypeWillChange]
 	public function key();
 
 	/**
@@ -37,6 +40,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 *
 	 * @return string[]|int[] A list of all the keys
 	 */
+    #[\ReturnTypeWillChange]
 	public function keys();
 
 	/**
@@ -44,6 +48,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 *
 	 * @return object|false Current object or false
 	 */
+    #[\ReturnTypeWillChange]
 	public function current();
 
 	/**
@@ -51,6 +56,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 *
 	 * @return object|false Next object or false
 	 */
+    #[\ReturnTypeWillChange]
 	public function next();
 
 	/**
@@ -58,6 +64,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 *
 	 * @return self Returns itself to facilitate chaining
 	 */
+    #[\ReturnTypeWillChange]
 	public function rewind();
 
 	/**
@@ -65,6 +72,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 *
 	 * @return bool True if list is empty, otherwise false
 	 */
+    #[\ReturnTypeWillChange]
 	public function isEmpty();
 
 	/**
@@ -72,6 +80,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 *
 	 * @return int Amount of objects in list
 	 */
+    #[\ReturnTypeWillChange]
 	public function count();
 
 	/**
@@ -79,6 +88,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 *
 	 * @return bool True if pointer is on first object, otherwise false
 	 */
+    #[\ReturnTypeWillChange]
 	public function isOnFirst();
 
 	/**
@@ -86,6 +96,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 *
 	 * @return bool True if pointer is on last object, otherwise false
 	 */
+    #[\ReturnTypeWillChange]
 	public function isOnLast();
 
 	/**
@@ -96,6 +107,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 * @return bool True if pointer is on given position, otherwise false
 	 * @throws InvalidArgumentException If the given position couldn't be understood
 	 */
+    #[\ReturnTypeWillChange]
 	public function isOnPosition($position);
 
 	/**
@@ -103,6 +115,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 *
 	 * @return object|false First object or false if empty
 	 */
+    #[\ReturnTypeWillChange]
 	public function getFirst();
 
 	/**
@@ -110,6 +123,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 *
 	 * @return object|false Last object or false if empty
 	 */
+    #[\ReturnTypeWillChange]
 	public function getLast();
 
 	/**
@@ -120,6 +134,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 * @return object|false Object from given position or false if not found
 	 * @throws InvalidArgumentException If the given position couldn't be understood
 	 */
+    #[\ReturnTypeWillChange]
 	public function getForPosition($position);
 
 	/**
@@ -129,6 +144,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 *
 	 * @return bool True if this list contains the requested key, otherwise false
 	 */
+    #[\ReturnTypeWillChange]
 	public function has($key);
 
 	/**
@@ -138,6 +154,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 *
 	 * @return string|int|false The key if object was found, otherwise false
 	 */
+    #[\ReturnTypeWillChange]
 	public function hasObject($object);
 
 	/**
@@ -147,6 +164,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 *
 	 * @return object|false The requested object if found, otherwise false
 	 */
+    #[\ReturnTypeWillChange]
 	public function get($key);
 
 	/**
@@ -154,6 +172,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 *
 	 * @return object[]
 	 */
+    #[\ReturnTypeWillChange]
 	public function getObjects();
 
 	/**
@@ -164,6 +183,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 * @return self Returns itself to facilitate chaining
 	 * @throws InvalidArgumentException
 	 */
+    #[\ReturnTypeWillChange]
 	public function add($object);
 
 	/**
@@ -178,6 +198,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 * @return self Returns itself to facilitate chaining
 	 * @throws InvalidArgumentException If the given position cannot be understood
 	 */
+    #[\ReturnTypeWillChange]
 	public function insert($object, $position);
 
 	/**
@@ -189,6 +210,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 *
 	 * @return self Returns itself to facilitate chaining
 	 */
+    #[\ReturnTypeWillChange]
 	public function remove($key);
 
 	/**
@@ -201,6 +223,7 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 *
 	 * @return self Returns itself to facilitate chaining
 	 */
+    #[\ReturnTypeWillChange]
 	public function removeObject($object);
 
 	/**
@@ -208,5 +231,6 @@ interface ObjectListInterface extends \Countable, \Iterator
 	 *
 	 * @return self Returns itself to facilitate chaining
 	 */
+    #[\ReturnTypeWillChange]
 	public function reverse();
 }

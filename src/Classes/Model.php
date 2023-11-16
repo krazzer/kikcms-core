@@ -10,6 +10,7 @@ use Phalcon\Mvc\Model\ResultsetInterface;
 use ReflectionClass;
 use Phalcon\Mvc\Model\Resultset;
 
+#[\AllowDynamicProperties]
 class Model extends \Phalcon\Mvc\Model
 {
     const TABLE = null;
