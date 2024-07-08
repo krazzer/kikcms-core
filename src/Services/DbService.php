@@ -643,6 +643,46 @@ class DbService extends Injectable
     }
 
     /**
+     * Build up an array like:
+     *
+     * $result = [
+     *      firstKey => [
+     *          secondKey => [array, array, array, ... ]
+     *          secondKey => [array, array, array, ... ]
+     *      ],
+     *      firstKey => [
+     *          secondKey => [array, array, array, ... ]
+     *          secondKey => [array, array, array, ... ]
+     *      ],
+     * ]
+     *
+     * @param BuilderInterface $query
+     * @return array
+     */
+    public function getArrayTable(BuilderInterface $query): array
+    {
+        $results = $query->getQuery()->execute();
+        $table   = [];
+
+        foreach ($results as $result) {
+            if ($result instanceof Row) {
+                $result = $result->toArray();
+            }
+
+            $firstColumn  = array_values($result)[0];
+            $secondColumn = array_values($result)[1];
+
+            if ( ! array_key_exists($firstColumn, $table)) {
+                $table[$firstColumn] = [];
+            }
+
+            $table[$firstColumn][$secondColumn][] = $result;
+        }
+
+        return $table;
+    }
+
+    /**
      * @param BuilderInterface $query
      * @return array
      */
