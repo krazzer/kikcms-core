@@ -2,6 +2,7 @@
 
 namespace KikCmsCore\Services;
 
+use AllowDynamicProperties;
 use Closure;
 use DateTime;
 use Exception;
@@ -12,7 +13,7 @@ use KikCmsCore\Classes\ObjectList;
 use KikCmsCore\Classes\ObjectMap;
 use KikCmsCore\Exceptions\DbForeignKeyDeleteException;
 use Monolog\Logger;
-use Phalcon\Config;
+use Phalcon\Config\Config;
 use Phalcon\Db\Enum;
 use Phalcon\Db\ResultInterface;
 use Phalcon\Di\Injectable;
@@ -27,6 +28,8 @@ use Phalcon\Mvc\Model\Row;
  * @property Logger $logger
  * @property Config $config
  */
+
+#[AllowDynamicProperties]
 class DbService extends Injectable
 {
     /**
