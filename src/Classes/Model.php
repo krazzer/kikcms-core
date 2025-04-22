@@ -126,8 +126,9 @@ class Model extends \Phalcon\Mvc\Model
      * @param $id
      *
      * @return null|Model|mixed
+     * @noinspection PhpMissingReturnTypeInspection
      */
-    public static function getById($id): mixed
+    public static function getById($id)
     {
         if ( ! $id) {
             return null;
