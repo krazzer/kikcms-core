@@ -80,7 +80,7 @@ class Model extends \Phalcon\Mvc\Model
      * @inheritdoc
      */
     public function hasManyToMany($fields, $intermediateModel, $intermediateFields, $intermediateReferencedFields,
-                                  $referenceModel, $referencedFields, $options = null): Relation
+        $referenceModel, $referencedFields, $options = null): Relation
     {
         $options = $this->updateDefaults($options);
 
@@ -127,13 +127,16 @@ class Model extends \Phalcon\Mvc\Model
      *
      * @return null|Model|mixed
      */
-    public static function getById($id)
+    public static function getById($id): mixed
     {
         if ( ! $id) {
             return null;
         }
 
-        return self::findFirst('id = ' . $id);
+        return self::findFirst([
+            'id = :id:',
+            'bind' => ['id' => $id]
+        ]);
     }
 
     /**
