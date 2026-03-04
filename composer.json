@@ -3,7 +3,10 @@
   "license": "MIT",
   "require": {
     "swiftmailer/swiftmailer": "^6.0",
-    "monolog/monolog": "^3.9.0"
+    "kiksaus/monolog": "^3.0"
+  },
+  "require-dev": {
+    "phalcon/ide-stubs": "v5.9.3"
   },
   "autoload": {
     "psr-4": {
