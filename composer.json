@@ -2,7 +2,6 @@
   "name": "kiksaus/kikcms-core",
   "license": "MIT",
   "require": {
-    "swiftmailer/swiftmailer": "^6.0",
     "kiksaus/monolog": "^3.0"
   },
   "require-dev": {
