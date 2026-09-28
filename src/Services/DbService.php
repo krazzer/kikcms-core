@@ -188,8 +188,10 @@ class DbService extends Injectable
     {
         $table = $this->getTableForModel($model);
 
-        if (is_array($where)) {
+        if ($where && is_array($where)) {
             $where = $this->getWhereClauseByArray($where);
+        } else {
+            $where = null;
         }
 
         return $this->db->update($table, array_keys($set), array_values($set), $where);
