@@ -877,7 +877,7 @@ class DbService extends Injectable
      * @param string $model
      * @return string
      */
-    private function getTableForModel(string $model): string
+    public function getTableForModel(string $model): string
     {
         /** @var Model $model */
         $model = new $model();
