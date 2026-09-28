@@ -184,7 +184,7 @@ class DbService extends Injectable
      *
      * @return bool
      */
-    public function update(string $model, array $set, array $where = []): bool
+    public function update(string $model, array $set, array|string|null $where = []): bool
     {
         $table = $this->getTableForModel($model);
 
