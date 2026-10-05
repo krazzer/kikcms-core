@@ -190,8 +190,8 @@ class DbService extends Injectable
 
         if ($where && is_array($where)) {
             $where = $this->getWhereClauseByArray($where);
-        } else {
-            $where = [];
+        } elseif( ! $where) {
+            $where = null;
         }
 
         return $this->db->update($table, array_keys($set), array_values($set), $where);
