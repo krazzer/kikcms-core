@@ -327,6 +327,31 @@ class ObjectMap extends ObjectList implements ObjectMapInterface
     }
 
     /**
+     * Reorder the keys of the map
+     */
+    public function reorder(array $order): static
+    {
+        $currentKeys = $this->keys();
+        $newKeys     = [];
+
+        foreach ($order as $id) {
+            if (in_array($id, $currentKeys, true)) {
+                $newKeys[] = $id;
+            }
+        }
+
+        foreach ($currentKeys as $id) {
+            if ( ! in_array($id, $newKeys, true)) {
+                $newKeys[] = $id;
+            }
+        }
+
+        $this->keys = array_values($newKeys);
+
+        return $this;
+    }
+
+    /**
      * Actually add an object to the list of objects, generating a key if necessary.
      *
      * @param object $object
